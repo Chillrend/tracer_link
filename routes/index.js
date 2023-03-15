@@ -15,15 +15,28 @@ router.get('/', function(req, res, next) {
 
 router.get('/mhs', async function (req, res, next) {
   const nim = req.query.nim;
+  const exact = req.query.exact;
+  let opt;
 
-  const lulusan = await models.mahasiswa.findAll({
-    raw: true,
-    where: {
-      nim: {
-        [Op.startsWith]: nim
+  if(exact !== "true"){
+    opt = {
+      raw: true,
+      where: {
+        nim: {
+          [Op.startsWith]: nim
+        }
       }
     }
-  });
+  }else{
+    opt = {
+      raw: true,
+      where: {
+        nim: nim.toString(),
+      }
+    }
+  }
+
+  const lulusan = await models.mahasiswa.findAll(opt);
 
   const mhs_obj = await Promise.all(lulusan.map(async (mhs) => {
     const prodi = await models.program_studi.findByPk(mhs.id_program_studi,{
