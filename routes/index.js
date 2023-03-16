@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const moment = require('moment');
 
 const sequelize = require('./helpers/sequelize');
 const initModels = require('../models/init-models');
@@ -47,13 +48,21 @@ router.get('/mhs', async function (req, res, next) {
       raw: true,
     })
 
+    const lulus_th = await models.kelulusan.findOne({
+      raw: true,
+      where: {
+        id_mahasiswa: mhs.id,
+      }
+    })
+
     return {
       nama: mhs.nama_mhs,
       nim: mhs.nim,
       kode_prodi: prodi.kode,
       nama_prodi: prodi.nama_prodi,
       kode_jurusan: jurusan.kode,
-      nama_jurusan: jurusan.nama_jurusan
+      nama_jurusan: jurusan.nama_jurusan,
+      th_lulusan: moment(lulus_th.tgl_lulus).year(),
     }
 
   }))
