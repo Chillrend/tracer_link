@@ -55,8 +55,8 @@ router.get('/mhs', async function (req, res, next) {
       nim: mhs.nim,
       kode_prodi: prodi.kode,
       nama_prodi: prodi.nama_prodi,
-      kode_jurusan: jurusan.kode,
-      nama_jurusan: jurusan.nama_jurusan,
+      kode_jurusan: jurusan.kode !== undefined && jurusan.kode !== null ? jurusan.kode : null,
+      nama_jurusan: jurusan.nama_jurusan !== undefined && jurusan.nama_jurusan !== null ? jurusan.nama_jurusan : null,
       th_lulusan: th_lulus,
     }
 
