@@ -16,23 +16,12 @@ router.get('/', function(req, res, next) {
 
 router.get('/mhs', async function (req, res, next) {
   const nim = req.query.nim;
-  const exact = req.query.exact;
-  let opt;
 
-  if(exact !== "true"){
-    opt = {
-      raw: true,
-      where: {
-        nim: {
-          [Op.startsWith]: nim
-        }
-      }
-    }
-  }else{
-    opt = {
-      raw: true,
-      where: {
-        nim: nim.toString(),
+  let opt = {
+    raw: true,
+    where: {
+      nim: {
+        [Op.startsWith]: nim
       }
     }
   }
@@ -48,12 +37,18 @@ router.get('/mhs', async function (req, res, next) {
       raw: true,
     })
 
-    const lulus_th = await models.kelulusan.findOne({
+    const tgl_kelulusan = await models.kelulusan.findOne({
       raw: true,
       where: {
         id_mahasiswa: mhs.id,
       }
     })
+
+    let th_lulus = null;
+
+    if(tgl_kelulusan !== undefined && tgl_kelulusan !== null){
+      th_lulus = moment(tgl_kelulusan.tgl_lulus).year();
+    }
 
     return {
       nama: mhs.nama_mhs,
@@ -62,7 +57,7 @@ router.get('/mhs', async function (req, res, next) {
       nama_prodi: prodi.nama_prodi,
       kode_jurusan: jurusan.kode,
       nama_jurusan: jurusan.nama_jurusan,
-      th_lulusan: moment(lulus_th.tgl_lulus).year(),
+      th_lulusan: th_lulus,
     }
 
   }))
