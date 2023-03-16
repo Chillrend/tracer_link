@@ -15,7 +15,15 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/mhs', async function (req, res, next) {
+
   const nim = req.query.nim;
+
+  if(nim.length < 4){
+    res.json({
+      error: 401,
+      message: 'NIM must more than 3 character'
+    })
+  }
 
   let opt = {
     raw: true,
