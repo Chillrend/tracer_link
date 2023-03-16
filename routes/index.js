@@ -18,10 +18,10 @@ router.get('/mhs', async function (req, res, next) {
 
   const nim = req.query.nim;
 
-  if(nim.length < 4){
+  if(nim.length < 6){
     res.json({
       error: 401,
-      message: 'NIM must more than 3 character'
+      message: 'NIM must more than 5 character'
     })
   }
 
@@ -63,8 +63,8 @@ router.get('/mhs', async function (req, res, next) {
       nim: mhs.nim,
       kode_prodi: prodi.kode,
       nama_prodi: prodi.nama_prodi,
-      kode_jurusan: jurusan.kode !== undefined && jurusan.kode !== null ? jurusan.kode : null,
-      nama_jurusan: jurusan.nama_jurusan !== undefined && jurusan.nama_jurusan !== null ? jurusan.nama_jurusan : null,
+      kode_jurusan: jurusan.kode !== null ? jurusan.kode : null,
+      nama_jurusan: jurusan.kode !== null ? jurusan.nama_jurusan : null,
       th_lulusan: th_lulus,
     }
 
