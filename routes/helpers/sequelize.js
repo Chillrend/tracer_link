@@ -9,7 +9,7 @@ const sequelize = new Sequelize(process.env.DATABASE_NAME, process.env.DATABASE_
     dialect: 'postgres',
     port: process.env.DATABASE_PORT,
     schema: process.env.DATABASE_SCHEMA,
-    logging: true,
+    logging: process.env.debug,
 });
 
 // Export the Sequelize instance as a module
