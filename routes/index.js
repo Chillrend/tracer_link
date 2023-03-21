@@ -23,6 +23,7 @@ router.get('/mhs', async function (req, res, next) {
       error: 401,
       message: 'NIM must more than 5 character'
     })
+    return;
   }
 
   let opt = {
