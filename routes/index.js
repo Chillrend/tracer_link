@@ -108,7 +108,7 @@ router.get('/mhs_tahun_akademik', async function (req, res, next) {
   const tahun_akademik = await models.tahun_akademik.findOne({
     raw: true,
     where: {
-      id: mhsw.id_program_studi,
+      id: mhsw.id_tahun_akademik,
     }
   })
 
