@@ -74,6 +74,65 @@ router.get('/mhs', async function (req, res, next) {
   return res.json(mhs_obj);
 });
 
+router.get('/mhs_tahun_akademik', async function (req, res, next) {
+
+  const nim = req.query.nim;
+
+  if(nim.length < 6){
+    res.json({
+      error: 401,
+      message: 'NIM must more than 5 character'
+    })
+    return;
+  }
+
+  let opt = {
+    raw: true,
+    where: {
+      nim: {
+        [Op.eq]: nim
+      }
+    }
+  }
+
+  const mhsw = await models.mahasiswa.findOne(opt);
+
+  const prodi = await models.program_studi.findByPk(mhsw.id_program_studi,{
+    raw: true,
+  })
+
+  const jurusan = await models.jurusan.findByPk(prodi.id_jurusan, {
+    raw: true,
+  });
+
+  const tahun_akademik = await models.tahun_akademik.findOne({
+    raw: true,
+    where: {
+      id: mhsw.id_program_studi,
+    }
+  })
+
+  let th_akademik = null;
+
+  if(tahun_akademik !== undefined && tahun_akademik !== null){
+    th_akademik = tahun_akademik.tahun;
+  }
+
+  let mhs_obj = {
+    nama: mhsw.nama_mhs,
+    nim: mhsw.nim,
+    kode_prodi: prodi.kode,
+    nama_prodi: prodi.nama_prodi,
+    kode_jurusan: jurusan.kode !== null ? jurusan.kode : null,
+    nama_jurusan: jurusan.kode !== null ? jurusan.nama_jurusan : null,
+    th_akademik: tahun_akademik.tahun,
+  }
+
+  return res.json(mhs_obj);
+
+});
+
+router.get('/');
 router.get('/mhsprodi', async function (req, res, next) {
   const nim = req.query.nim;
 
