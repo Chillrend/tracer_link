@@ -97,6 +97,12 @@ router.get('/mhs_tahun_akademik', async function (req, res, next) {
 
   const mhsw = await models.mahasiswa.findOne(opt);
 
+  if(mhsw == null){
+    return res.status(400).send({
+      message: 'NIM Not Found!'
+    });
+  }
+
   const prodi = await models.program_studi.findByPk(mhsw.id_program_studi,{
     raw: true,
   })
@@ -111,12 +117,6 @@ router.get('/mhs_tahun_akademik', async function (req, res, next) {
       id: mhsw.id_tahun_akademik,
     }
   })
-
-  let th_akademik = null;
-
-  if(tahun_akademik !== undefined && tahun_akademik !== null){
-    th_akademik = tahun_akademik.tahun;
-  }
 
   let mhs_obj = {
     nama: mhsw.nama_mhs,
